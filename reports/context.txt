@@ -1,0 +1,6 @@
+1. Later I will do one hot encoding for the categorical features when I have end with mlops.
+
+
+
+
+

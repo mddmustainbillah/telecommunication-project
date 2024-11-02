@@ -1,0 +1,44 @@
+
+
+
+ #   Column            Non-Null Count  Dtype    Unique values count:
+---  ------            --------------  -----    --------------------
+ 0   orderId           20796 non-null  int64    20796 (pk)
+ 1   customer_id       20796 non-null  int64    2171
+ 2   registrationDate  20635 non-null  object   2132
+ 3   division          20635 non-null  object   8
+ 4   Bundle Type       20796 non-null  object   3
+ 5   operator          20796 non-null  object   4
+ 6   product_id        20796 non-null  int64    535
+ 7   Product Name      20796 non-null  object   289
+ 8   validity          20796 non-null  object   6
+ 9   regularPrice      20796 non-null  object   160
+ 10  sellingPrice      20796 non-null  object   606
+ 11  commission        20796 non-null  int64    156
+ 12  discount          20796 non-null  object   300
+ 13  orderStatus       20796 non-null  object   4
+ 14  orderTime         20796 non-null  object   20213
+ 15  deliveryTime      20796 non-null  object   19016
+ 16  complainStatus    1794  non-null  object   3
+ 17  complainTime      1793  non-null  object   1769
+ 18  reason            4611  non-null  object   105
+
+
+
+Columns that I will take initially for model building:
+1. Bundle Type
+2. operator
+3. Product Name
+4. validity
+5. regularPrice
+6. sellingPrice
+7. commission
+8. discount
+9. orderTime
+
+ 
+
+
+
+
+
