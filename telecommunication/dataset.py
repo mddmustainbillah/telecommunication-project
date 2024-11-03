@@ -1,29 +1,73 @@
-from pathlib import Path
+import sqlite3
+import pandas as pd
+from typing import Optional
+from logger import setup_logger
 
-import typer
-from loguru import logger
-from tqdm import tqdm
+# Initialize logger
+logger = setup_logger()
 
-from telecommunication.config import PROCESSED_DATA_DIR, RAW_DATA_DIR
+def fetch_telco_data(db_path: str = "../data/database.db") -> pd.DataFrame:
+    """
+    Fetch telco data from SQLite database.
+    
+    Args:
+        db_path (str): Path to the SQLite database file
+        
+    Returns:
+        pd.DataFrame: DataFrame containing the telco data
+        
+    Raises:
+        sqlite3.Error: If there's an error connecting to or querying the database
+    """
+    try:
+        # Connect to sqlite database
+        conn = sqlite3.connect(db_path)
+        logger.info(f"Connected to database at {db_path}")
+        
+        # Query to fetch the data
+        query = "SELECT * FROM telco"
+        
+        # Read the query result into DataFrame
+        data = pd.read_sql(query, conn)
+        logger.info(f"Data fetched successfully. Shape: {data.shape}")
+        
+        return data
+    
+    except sqlite3.Error as e:
+        logger.error(f"Database error: {str(e)}")
+        raise
+    
+    finally:
+        if conn:
+            conn.close()
 
-app = typer.Typer()
+def save_data(data: pd.DataFrame, output_path: str = "../data/raw/data.csv") -> None:
+    """
+    Save DataFrame to CSV file.
+    
+    Args:
+        data (pd.DataFrame): DataFrame to save
+        output_path (str): Path where to save the CSV file
+    """
+    data.to_csv(output_path, index=False)
+    logger.info(f"Data has been successfully saved to {output_path}")
 
-
-@app.command()
-def main(
-    # ---- REPLACE DEFAULT PATHS AS APPROPRIATE ----
-    input_path: Path = RAW_DATA_DIR / "dataset.csv",
-    output_path: Path = PROCESSED_DATA_DIR / "dataset.csv",
-    # ----------------------------------------------
-):
-    # ---- REPLACE THIS WITH YOUR OWN CODE ----
-    logger.info("Processing dataset...")
-    for i in tqdm(range(10), total=10):
-        if i == 5:
-            logger.info("Something happened for iteration 5.")
-    logger.success("Processing dataset complete.")
-    # -----------------------------------------
-
+def main():
+    """Main function to execute data fetching and saving"""
+    try:
+        # Step 1: Fetch data
+        logger.info("Fetching data from database...")
+        df = fetch_telco_data()
+        
+        # Step 2: Save raw data
+        logger.info("Saving raw data...")
+        save_data(df)
+        
+        logger.info("Data pipeline completed successfully!")
+        
+    except Exception as e:
+        logger.error(f"Error in pipeline: {str(e)}")
+        raise
 
 if __name__ == "__main__":
-    app()
+    main()
