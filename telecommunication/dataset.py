@@ -25,7 +25,7 @@ def fetch_telco_data(db_path: str = "../data/database.db") -> pd.DataFrame:
         logger.info(f"Connected to database at {db_path}")
         
         # Query to fetch the data
-        query = "SELECT * FROM telco"
+        query = """SELECT "Bundle Type",operator, "Product Name", validity, regularPrice, sellingPrice, commission FROM telco"""
         
         # Read the query result into DataFrame
         data = pd.read_sql(query, conn)
