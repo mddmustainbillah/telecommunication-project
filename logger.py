@@ -1,6 +1,25 @@
 import logging
 import sys
 from pathlib import Path
+from typing import Optional
+try:
+    from tqdm import tqdm
+    TQDM_INSTALLED = True
+except ImportError:
+    TQDM_INSTALLED = False
+
+class TqdmStreamHandler(logging.StreamHandler):
+    """Custom StreamHandler for tqdm compatibility"""
+    def emit(self, record):
+        try:
+            msg = self.format(record)
+            if TQDM_INSTALLED:
+                tqdm.write(msg)
+            else:
+                self.stream.write(msg + self.terminator)
+            self.flush()
+        except Exception:
+            self.handleError(record)
 
 def setup_logger(log_file: str = "logs/pipeline.log") -> logging.Logger:
     """
@@ -26,8 +45,8 @@ def setup_logger(log_file: str = "logs/pipeline.log") -> logging.Logger:
     file_handler = logging.FileHandler(log_file)
     file_handler.setFormatter(formatter)
     
-    # Create console handler
-    console_handler = logging.StreamHandler(sys.stdout)
+    # Create console handler with tqdm compatibility
+    console_handler = TqdmStreamHandler(sys.stdout)
     console_handler.setFormatter(formatter)
     
     # Add handlers to logger

@@ -4,3 +4,7 @@
 
 
 
+Notes:
+* For doing everything in local, I need to set the dvc remote to local. Command: dvc remote add -d local_storage /path/to/dvc-storage
+* For mlflow local tracking server, I need to run: mlflow server --backend-store-uri sqlite:///mlflow.db --default-artifact-root ./artifacts
+
