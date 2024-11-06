@@ -1,13 +1,10 @@
 from pathlib import Path
 from tqdm import tqdm
 import pandas as pd
+from sklearn.model_selection import train_test_split
 
-from telecommunication.config import PROCESSED_DATA_DIR
-
-from logger import setup_logger
-
-# Initialize logger
-logger = setup_logger()
+from telecommunication.config import RAW_DATA_DIR, INTERIM_DATA_DIR, PROCESSED_DATA_DIR, logger
+from utlis import load_params
 
 
 def clean_data(df: pd.DataFrame) -> pd.DataFrame:
@@ -113,22 +110,70 @@ def feature_mapping(df: pd.DataFrame) -> pd.DataFrame:
 
 
 
+def split_and_save_data(df: pd.DataFrame) -> None:
+    """
+    Split the dataframe into training and testing sets and save them to separate files
+    """
+    # Load parameters
+    params = load_params()
+    
+    # Access split parameters
+    test_size = params['split']['test_size']
+    random_state = params['split']['random_state']
+    
+    df = df.copy()
+    
+    # Use parameters in the split
+    train_df, test_df = train_test_split(
+        df, 
+        test_size=test_size, 
+        random_state=random_state
+    )
 
-@app.command()
-def main(
-    # ---- REPLACE DEFAULT PATHS AS APPROPRIATE ----
-    input_path: Path = PROCESSED_DATA_DIR / "dataset.csv",
-    output_path: Path = PROCESSED_DATA_DIR / "features.csv",
-    # -----------------------------------------
-):
-    # ---- REPLACE THIS WITH YOUR OWN CODE ----
-    logger.info("Generating features from dataset...")
-    for i in tqdm(range(10), total=10):
-        if i == 5:
-            logger.info("Something happened for iteration 5.")
-    logger.success("Features generation complete.")
-    # -----------------------------------------
+    return train_df, test_df
 
+
+
+
+def main():
+    """
+    Main function to execute data cleaning, feature engineering, and mapping
+    """
+    try:  
+        # Add this debug line
+        print(f"Number of handlers: {len(logger.handlers)}")
+    
+        logger.info("Starting features generation and mapping...")
+        logger.info(f"Reading raw data from {RAW_DATA_DIR / 'raw_dataset.csv'}")
+        df = pd.read_csv(RAW_DATA_DIR / "raw_dataset.csv")
+
+        logger.info("Cleaning data...")
+        df = clean_data(df)
+
+        logger.info("Engineering features...")
+        df = feature_engineering(df)
+
+        logger.info("Mapping features...")
+        df = feature_mapping(df)
+
+        logger.info(f"Saving interim data to {INTERIM_DATA_DIR / 'interim_dataset.csv'}")
+        df.to_csv(INTERIM_DATA_DIR / "interim_dataset.csv", index=False)
+
+        logger.info("Features generation and mapping completed successfully.")
+
+        logger.info("Splitting data into training and testing sets...")
+        train_df, test_df = split_and_save_data(df)   
+
+        logger.info(f"Saving training and testing sets to {PROCESSED_DATA_DIR}")
+        train_df.to_csv(PROCESSED_DATA_DIR / "train_dataset.csv", index=False)
+        test_df.to_csv(PROCESSED_DATA_DIR / "test_dataset.csv", index=False)
+
+        logger.info("Data splitting and saving completed successfully.")   
+
+
+    except Exception as e:
+        logger.error(f"Error in pipeline: {str(e)}")
+        raise
 
 if __name__ == "__main__":
-    app()
+    main()

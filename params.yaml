@@ -1,0 +1,21 @@
+# Data Split Parameters
+split:
+  test_size: 0.2
+  random_state: 42
+
+# # Model Parameters
+# model:
+#   alpha: 0.01
+#   max_iter: 1000
+#   tol: 1e-4
+
+# # Feature Engineering Parameters
+# features:
+#   min_internet_gb: 0.1
+#   max_validity_days: 30
+
+# # Training Parameters
+# training:
+#   batch_size: 32
+#   epochs: 100
+#   learning_rate: 0.001
