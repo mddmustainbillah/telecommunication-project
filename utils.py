@@ -2,9 +2,10 @@ import yaml
 from pathlib import Path
 from typing import Dict, Any
 from telecommunication.config import PROJ_ROOT
+
+
 def validate_params(params: Dict[str, Any]) -> None:
     """Validate parameters from yaml file"""
-    print(params)
     required_params = {
         'split': ['test_size', 'random_state'],
         # 'model': ['alpha', 'max_iter', 'tol'],
@@ -12,8 +13,6 @@ def validate_params(params: Dict[str, Any]) -> None:
     }
     
     for group, params_list in required_params.items():
-        print(group)
-        print(params_list)
         if group not in params:
             raise ValueError(f"Missing parameter group: {group}")
         for param in params_list:

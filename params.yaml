@@ -3,11 +3,16 @@ split:
   test_size: 0.2
   random_state: 42
 
-# # Model Parameters
+model:
+  n_estimators: 100
+  random_state: 1234
+
 # model:
-#   alpha: 0.01
-#   max_iter: 1000
-#   tol: 1e-4
+#   random_state: 42
+#   n_estimators_grid: [100, 200, 300]
+#   max_depth_grid: [10, 20, 30, null]
+#   min_samples_split_grid: [2, 5, 10]
+#   min_samples_leaf_grid: [1, 2, 4]
 
 # # Feature Engineering Parameters
 # features:

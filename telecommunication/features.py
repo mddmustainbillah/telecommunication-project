@@ -4,12 +4,12 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 
 from telecommunication.config import RAW_DATA_DIR, INTERIM_DATA_DIR, PROCESSED_DATA_DIR, logger
-from utlis import load_params
+from utils import load_params
 
 
 def clean_data(df: pd.DataFrame) -> pd.DataFrame:
     """
-    Clean the dataframe by handling missing values, converting datatypes, and filtering data
+    Clean the DataFrame by handling missing values, converting datatypes, and filtering data
     """
     df = df.copy()
     
@@ -140,9 +140,6 @@ def main():
     Main function to execute data cleaning, feature engineering, and mapping
     """
     try:  
-        # Add this debug line
-        print(f"Number of handlers: {len(logger.handlers)}")
-    
         logger.info("Starting features generation and mapping...")
         logger.info(f"Reading raw data from {RAW_DATA_DIR / 'raw_dataset.csv'}")
         df = pd.read_csv(RAW_DATA_DIR / "raw_dataset.csv")
