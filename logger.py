@@ -21,22 +21,33 @@ class TqdmStreamHandler(logging.StreamHandler):
         except Exception:
             self.handleError(record)
 
-def setup_logger(log_file: str = "logs/pipeline.log") -> logging.Logger:
+def setup_logger(proj_root: Optional[Path] = None) -> logging.Logger:
     """
     Configure logger to write to both file and console
     
     Args:
-        log_file (str): Path to the log file
+        proj_root (Optional[Path]): Project root directory. If None, will determine automatically.
         
     Returns:
         logging.Logger: Configured logger instance
     """
-    # Create logs directory if it doesn't exist
-    Path(log_file).parent.mkdir(parents=True, exist_ok=True)
+    # Determine project root if not provided
+    if proj_root is None:
+        proj_root = Path(__file__).resolve().parents[1]  # Go up two levels from logger.py
+    
+    # Create logs directory in project root
+    logs_dir = proj_root / "logs"
+    logs_dir.mkdir(parents=True, exist_ok=True)
+    
+    log_file = logs_dir / "pipeline.log"
     
     # Create logger
     logger = logging.getLogger('telco_pipeline')
     logger.setLevel(logging.INFO)
+    
+    # Clear any existing handlers
+    if logger.hasHandlers():
+        logger.handlers.clear()
     
     # Create formatters
     formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
