@@ -29,21 +29,21 @@ from utils import load_params
 # Suppress warnings
 warnings.filterwarnings("ignore", message="Setuptools is replacing distutils")
 
-# Set absolute path for MLflow tracking URI
-mlflow_path = str(PROJ_ROOT.absolute() / 'mlruns')
-os.environ['MLFLOW_TRACKING_URI'] = f"file://{mlflow_path}"
+# Set MLflow tracking URI using absolute path and change working directory
+MLRUNS_DIR = PROJ_ROOT / "mlruns"
+os.environ['MLFLOW_TRACKING_URI'] = f"file://{MLRUNS_DIR.absolute()}"
+os.environ['MLFLOW_REGISTRY_URI'] = f"file://{MLRUNS_DIR.absolute()}"
 mlflow.set_tracking_uri(os.environ['MLFLOW_TRACKING_URI'])
 
-# Ensure we're working from project root
-os.chdir(str(PROJ_ROOT))
+# Change working directory to project root before any MLflow operations
+os.chdir(str(PROJ_ROOT.absolute()))
 
-# Ensure directories exist
-PROJ_ROOT.mkdir(parents=True, exist_ok=True)
-REPORTS_DIR.mkdir(parents=True, exist_ok=True)
-MLRUNS_DIR = PROJ_ROOT / "mlruns"
+# Create necessary directories in project root
 MLRUNS_DIR.mkdir(parents=True, exist_ok=True)
 LOGS_DIR = PROJ_ROOT / "logs"
 LOGS_DIR.mkdir(parents=True, exist_ok=True)
+MODELS_DIR.mkdir(parents=True, exist_ok=True)
+REPORTS_DIR.mkdir(parents=True, exist_ok=True)
 
 def load_data(train_path: Path, test_path: Path, target_column: str) -> Tuple[pd.DataFrame, pd.Series, pd.DataFrame, pd.Series]:
     """Load and split the train and test datasets into features and labels"""
