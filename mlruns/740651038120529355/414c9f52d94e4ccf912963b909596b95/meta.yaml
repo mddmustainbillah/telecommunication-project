@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/macbookpro/Resources/mlops/telecommunication-project/mlruns/740651038120529355/414c9f52d94e4ccf912963b909596b95/artifacts
+end_time: 1731305382672
+entry_point_name: ''
+experiment_id: '740651038120529355'
+lifecycle_stage: active
+run_id: 414c9f52d94e4ccf912963b909596b95
+run_name: model_comparison_20241111_120820
+run_uuid: 414c9f52d94e4ccf912963b909596b95
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1731305300587
+status: 3
+tags: []
+user_id: macbookpro

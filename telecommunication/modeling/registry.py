@@ -1,83 +1,99 @@
+import os
 import mlflow
 from mlflow.tracking import MlflowClient
 from typing import Optional, Dict
-from datetime import datetime
-from telecommunication.config import logger
+from telecommunication.config import logger, PROJ_ROOT
+
+# Initialize MLflow client and set tracking URI
+MLRUNS_DIR = PROJ_ROOT / "mlruns"
+os.environ['MLFLOW_TRACKING_URI'] = f"file://{str(MLRUNS_DIR.absolute())}"
+os.environ['MLFLOW_REGISTRY_URI'] = f"file://{str(MLRUNS_DIR.absolute())}"
+mlflow.set_tracking_uri(os.environ['MLFLOW_TRACKING_URI'])
 
 class ModelRegistry:
     def __init__(self):
         self.client = MlflowClient()
-        self.performance_threshold = 0.5  # Minimum R² score required for production
 
-    def get_model_version(self, model_name: str, stage: str = None) -> Optional[Dict]:
-        """Get latest version of model in specified stage"""
+    def get_production_model(self, model_name: str):
+        """Get the production model"""
         try:
-            versions = self.client.get_latest_versions(model_name, stages=[stage] if stage else None)
-            if not versions:
-                return None
-            return {
-                'version': versions[0].version,
-                'stage': versions[0].current_stage,
-                'run_id': versions[0].run_id
-            }
+            # Search for registered models
+            registered_models = self.client.search_registered_models(filter_string=f"name='{model_name}'")
+            logger.info(f"Available registered models: {[rm.name for rm in registered_models]}")
+            
+            # Get production versions
+            versions = self.client.get_latest_versions(model_name, stages=["Production"])
+            logger.info(f"Production versions found: {versions}")
+            
+            if versions:
+                model_uri = f"models:/{model_name}/{versions[0].version}"
+                logger.info(f"Loading model from URI: {model_uri}")
+                return mlflow.pyfunc.load_model(model_uri)
+            logger.error(f"No production version found for model: {model_name}")
+            return None
         except Exception as e:
-            logger.error(f"Error getting model version: {str(e)}")
+            logger.error(f"Error loading production model: {str(e)}")
             return None
 
-    def promote_to_production(self, model_name: str) -> bool:
-        """Promote staging model to production if it meets criteria"""
+    def get_staging_model(self, model_name: str) -> Optional[Dict]:
+        """Get current staging model details"""
+        try:
+            versions = self.client.get_latest_versions(model_name, stages=["Staging"])
+            if versions:
+                version = versions[0]
+                return {
+                    'version': version.version,
+                    'run_id': version.run_id,
+                    'current_stage': version.current_stage
+                }
+            return None
+        except Exception as e:
+            logger.error(f"Error getting staging model: {str(e)}")
+            return None
+
+    def promote_staging_to_production(self, model_name: str) -> bool:
+        """Promote staging model to production"""
         try:
             # Get staging model
-            staging_model = self.get_model_version(model_name, "Staging")
+            staging_model = self.get_staging_model(model_name)
             if not staging_model:
-                logger.warning(f"No {model_name} model in staging")
+                logger.warning(f"No staging model found for {model_name}")
                 return False
 
-            # Get model metrics
-            run = self.client.get_run(staging_model['run_id'])
-            r2_score = run.data.metrics.get('r2', 0)
-
-            # Check if model meets performance threshold
-            if r2_score > self.performance_threshold:
-                # Archive current production model if exists
-                current_prod = self.get_model_version(model_name, "Production")
-                if current_prod:
-                    self.client.transition_model_version_stage(
-                        name=model_name,
-                        version=current_prod['version'],
-                        stage="Archived"
-                    )
-
-                # Promote staging to production
-                self.client.transition_model_version_stage(
-                    name=model_name,
-                    version=staging_model['version'],
-                    stage="Production"
-                )
-                logger.info(f"Model {model_name} v{staging_model['version']} promoted to production")
-                return True
-            
-            logger.warning(f"Model performance {r2_score} below threshold {self.performance_threshold}")
-            return False
+            # Transition to production
+            self.client.transition_model_version_stage(
+                name=model_name,
+                version=staging_model['version'],
+                stage="Production",
+                archive_existing_versions=True
+            )
+            logger.info(f"Model {model_name} version {staging_model['version']} promoted to production")
+            return True
 
         except Exception as e:
             logger.error(f"Error promoting model to production: {str(e)}")
             return False
 
-    def get_model_info(self, model_name: str) -> Dict:
-        """Get information about all versions of a model"""
-        try:
-            versions = self.client.search_model_versions(f"name='{model_name}'")
-            return {
-                'model_name': model_name,
-                'versions': [{
-                    'version': v.version,
-                    'stage': v.current_stage,
-                    'run_id': v.run_id,
-                    'metrics': self.client.get_run(v.run_id).data.metrics,
-                    'timestamp': datetime.fromtimestamp(v.creation_timestamp/1000)
-                } for v in versions]
-            }
-        except Exception as e:
-            logger.error(f"Error getting model info: {str(e)}")
-            return {}
+def main():
+    """Promote the best model from staging to production"""
+    try:
+        registry = ModelRegistry()
+        # Get all registered models
+        registered_models = registry.client.search_registered_models()
+        
+        for rm in registered_models:
+            model_name = rm.name
+            logger.info(f"Processing model: {model_name}")
+            
+            # If there's a staging model, promote it
+            success = registry.promote_staging_to_production(model_name)
+            if success:
+                logger.info(f"Successfully promoted {model_name} to production")
+            else:
+                logger.warning(f"Failed to promote {model_name} to production")
+            
+    except Exception as e:
+        logger.error(f"Error in main execution: {str(e)}")
+
+if __name__ == "__main__":
+    main()

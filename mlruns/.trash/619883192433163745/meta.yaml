@@ -1,0 +1,9 @@
+artifact_location: file:///Users/macbookpro/Resources/mlops/telecommunication-project/mlruns/619883192433163745
+creation_time: 1731237423829
+experiment_id: '619883192433163745'
+last_update_time: 1731307630352
+lifecycle_stage: deleted
+name: telco_commission_prediction
+tags:
+  priority: high
+  version: '1.0'

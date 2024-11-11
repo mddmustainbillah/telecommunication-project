@@ -1,0 +1,13 @@
+aliases: []
+creation_timestamp: 1731326520591
+current_stage: None
+description: null
+last_updated_timestamp: 1731326520591
+name: DecisionTree_model
+run_id: e7abc0ff8865477888aa2d245dd5e00c
+run_link: null
+source: file:///Users/macbookpro/Resources/mlops/telecommunication-project/mlruns/740651038120529355/e7abc0ff8865477888aa2d245dd5e00c/artifacts/model
+status: READY
+status_message: null
+user_id: null
+version: 6

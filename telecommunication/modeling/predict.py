@@ -1,30 +1,58 @@
-from pathlib import Path
+import pandas as pd
+from typing import Dict, Union
+from telecommunication.config import logger
+from telecommunication.modeling.registry import ModelRegistry
 
-import typer
-from loguru import logger
-from tqdm import tqdm
+def predict(data: Union[pd.DataFrame, Dict]) -> Dict:
+    """Make predictions using the production model"""
+    try:
+        # Convert dict to DataFrame if necessary
+        if isinstance(data, dict):
+            data = pd.DataFrame([data])
 
-from telecommunication.config import MODELS_DIR, PROCESSED_DATA_DIR
+        # Get production model
+        registry = ModelRegistry()
+        model = registry.get_production_model("best_model")
+        
+        if model is None:
+            return {"error": "No production model available", "status": "failed"}
 
-app = typer.Typer()
+        # Make prediction
+        predictions = model.predict(data)
+        
+        return {
+            "predictions": predictions.tolist(),
+            "status": "success"
+        }
 
+    except Exception as e:
+        logger.error(f"Prediction failed: {str(e)}")
+        return {
+            "error": str(e),
+            "status": "failed"
+        }
 
-@app.command()
-def main(
-    # ---- REPLACE DEFAULT PATHS AS APPROPRIATE ----
-    features_path: Path = PROCESSED_DATA_DIR / "test_features.csv",
-    model_path: Path = MODELS_DIR / "model.pkl",
-    predictions_path: Path = PROCESSED_DATA_DIR / "test_predictions.csv",
-    # -----------------------------------------
-):
-    # ---- REPLACE THIS WITH YOUR OWN CODE ----
-    logger.info("Performing inference for model...")
-    for i in tqdm(range(10), total=10):
-        if i == 5:
-            logger.info("Something happened for iteration 5.")
-    logger.success("Inference complete.")
-    # -----------------------------------------
+def batch_predict(data_path: str) -> Dict:
+    """Make predictions on a batch of data"""
+    try:
+        # Load data
+        data = pd.read_csv(data_path)
+        
+        # Make predictions
+        results = predict(data)
+        
+        if results["status"] == "success":
+            # Save predictions
+            predictions_df = pd.DataFrame({
+                'prediction': results["predictions"]
+            })
+            predictions_df.to_csv(data_path.replace('.csv', '_predictions.csv'), index=False)
+            
+        return results
 
-
-if __name__ == "__main__":
-    app()
+    except Exception as e:
+        logger.error(f"Batch prediction failed: {str(e)}")
+        return {
+            "error": str(e),
+            "status": "failed"
+        }

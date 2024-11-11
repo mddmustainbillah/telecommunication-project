@@ -1,0 +1,13 @@
+aliases: []
+creation_timestamp: 1731317721649
+current_stage: None
+description: null
+last_updated_timestamp: 1731317721649
+name: LinearRegression_model
+run_id: f8b9ec32465343f5bff00dfd0e3ee44f
+run_link: null
+source: file:///Users/macbookpro/Resources/mlops/telecommunication-project/mlruns/740651038120529355/f8b9ec32465343f5bff00dfd0e3ee44f/artifacts/model
+status: READY
+status_message: null
+user_id: null
+version: 5

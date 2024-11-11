@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/macbookpro/Resources/mlops/telecommunication-project/mlruns/740651038120529355/42a50bf5dc87475e93e1636dce479675/artifacts
+end_time: 1731307104909
+entry_point_name: ''
+experiment_id: '740651038120529355'
+lifecycle_stage: active
+run_id: 42a50bf5dc87475e93e1636dce479675
+run_name: GradientBoosting_20241111_123805
+run_uuid: 42a50bf5dc87475e93e1636dce479675
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1731307085260
+status: 3
+tags: []
+user_id: macbookpro

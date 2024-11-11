@@ -1,0 +1,16 @@
+artifact_uri: file:///Users/macbookpro/Resources/mlops/telecommunication-project/mlruns/619883192433163745/40f1427a89644af580e42ed3904f1eab/artifacts
+deleted_time: 1731307630352
+end_time: 1731237486344
+entry_point_name: ''
+experiment_id: '619883192433163745'
+lifecycle_stage: deleted
+run_id: 40f1427a89644af580e42ed3904f1eab
+run_name: LinearRegression_20241110_171803
+run_uuid: 40f1427a89644af580e42ed3904f1eab
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1731237483643
+status: 3
+tags: []
+user_id: macbookpro
