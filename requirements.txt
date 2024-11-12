@@ -19,3 +19,6 @@ dvc
 seaborn
 pyyaml
 xgboost 
+mlflow
+fastapi
+pydantic
