@@ -5,7 +5,7 @@ from typing import Optional
 from telecommunication.config import logger
 
 
-def fetch_telco_data(db_path: str = "../data/database.db") -> pd.DataFrame:
+def fetch_telco_data(db_path: str = "data/database.db") -> pd.DataFrame:
     """
     Fetch telco data from SQLite database.
     
@@ -40,7 +40,7 @@ def fetch_telco_data(db_path: str = "../data/database.db") -> pd.DataFrame:
         if conn:
             conn.close()
 
-def save_data(data: pd.DataFrame, output_path: str = "../data/raw/raw_dataset.csv") -> None:
+def save_data(data: pd.DataFrame, output_path: str = "data/raw/raw_dataset.csv") -> None:
     """
     Save DataFrame to CSV file.
     

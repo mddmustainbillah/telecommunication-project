@@ -183,79 +183,74 @@ def train_and_evaluate_model(model_name: str, model_config: Dict,
                            X_test: pd.DataFrame, y_test: pd.Series, 
                            model_dir: Path, metrics_dir: Path, 
                            training_params: Dict) -> Tuple[Any, Dict, str]:
-    """Train and evaluate a single model"""
-    # Create model-specific directories
-    model_metrics_dir = metrics_dir / model_name
-    model_metrics_dir.mkdir(parents=True, exist_ok=True)
-
-    with mlflow.start_run(run_name=f"{model_name}_{datetime.now().strftime('%Y%m%d_%H%M%S')}", 
-                         nested=True) as run:
-        # Get model and parameter grid
-        model, param_grid = get_model_and_params(model_name, model_config)
-        
-        # Log model configuration
-        mlflow.log_param("model_type", model_config['model_type'])
-        mlflow.log_params({f"config_{k}": str(v) for k, v in model_config.items() 
-                          if k != 'params'})
-        
-        # Tune hyperparameters
-        logger.info(f"Training {model_name}...")
-        best_model, best_params, cv_results = tune_hyperparameters(
-            model, param_grid, X_train, y_train, model_name,
-            training_params['n_iter_search'], training_params['cv_folds']
-        )
-
-        # Log parameters and CV results
-        mlflow.log_params(best_params)
-        mlflow.log_metrics({f"cv_{k}": v for k, v in cv_results.items() 
-                           if isinstance(v, (int, float))})
-
-        # Save CV results in model-specific directory
-        cv_results_path = model_metrics_dir / f"{model_name}_cv_results.json"
-        with open(cv_results_path, 'w') as f:
-            json.dump(cv_results, f, default=lambda x: x.tolist() 
-                     if isinstance(x, np.ndarray) else x)
-        mlflow.log_artifact(cv_results_path)
-
-        # Evaluate on test set
-        test_metrics = evaluate_model(best_model, X_test, y_test)
-        logger.info(f"{model_name} test metrics: {test_metrics}")
-        mlflow.log_metrics(test_metrics)
-
-        # Log feature importance if available
-        if hasattr(best_model, 'feature_importances_'):
-            feature_importance = pd.DataFrame({
-                'feature': X_train.columns,
-                'importance': best_model.feature_importances_
-            }).sort_values('importance', ascending=False)
+    try:
+        with mlflow.start_run(nested=True) as run:
+            # Get model and parameter grid
+            model, param_grid = get_model_and_params(model_name, model_config)
             
-            importance_path = model_metrics_dir / f"{model_name}_feature_importance.csv"
-            feature_importance.to_csv(importance_path, index=False)
-            mlflow.log_artifact(importance_path)
+            # Log model configuration
+            mlflow.log_param("model_type", model_config['model_type'])
+            mlflow.log_params({f"config_{k}": str(v) for k, v in model_config.items() 
+                              if k != 'params'})
+            
+            # Tune hyperparameters
+            logger.info(f"Training {model_name}...")
+            best_model, best_params, cv_results = tune_hyperparameters(
+                model, param_grid, X_train, y_train, model_name,
+                training_params['n_iter_search'], training_params['cv_folds']
+            )
 
-        # Register model
-        model_uri = mlflow.sklearn.log_model(
-            best_model,
-            "model",
-            registered_model_name=f"{model_name}_model"
-        ).model_uri
+            # Log parameters and CV results
+            mlflow.log_params(best_params)
+            mlflow.log_metrics({f"cv_{k}": v for k, v in cv_results.items() 
+                               if isinstance(v, (int, float))})
 
-        # Model version tracking 
-        client = MlflowClient()
-        latest_version = client.get_latest_versions(f"{model_name}_model")[0].version
-        model_version = client.get_model_version(
-            name=f"{model_name}_model",
-            version=latest_version
-        )
-        mlflow.log_param("model_version", model_version.version)
+            # Save CV results in model-specific directory
+            cv_results_path = metrics_dir / model_name / f"{model_name}_cv_results.json"
+            with open(cv_results_path, 'w') as f:
+                json.dump(cv_results, f, default=lambda x: x.tolist() 
+                         if isinstance(x, np.ndarray) else x)
+            mlflow.log_artifact(cv_results_path)
 
-        # Save artifacts locally
-        save_model_artifacts(best_model, test_metrics, 
-                           model_dir / model_name,  # Model directory
-                           model_metrics_dir)       # Model-specific metrics directory
+            # Evaluate on test set
+            test_metrics = evaluate_model(best_model, X_test, y_test)
+            logger.info(f"{model_name} test metrics: {test_metrics}")
+            mlflow.log_metrics(test_metrics)
 
-        return best_model, test_metrics, run.info.run_id
-    
+            # Log feature importance if available
+            if hasattr(best_model, 'feature_importances_'):
+                feature_importance = pd.DataFrame({
+                    'feature': X_train.columns,
+                    'importance': best_model.feature_importances_
+                }).sort_values('importance', ascending=False)
+                
+                importance_path = metrics_dir / model_name / f"{model_name}_feature_importance.csv"
+                feature_importance.to_csv(importance_path, index=False)
+                mlflow.log_artifact(importance_path)
+
+            # Log the model with MLflow
+            mlflow.sklearn.log_model(
+                best_model,
+                "model",
+                registered_model_name=f"{model_name}_model"
+            )
+
+            # Save model artifacts locally
+            model_metrics_dir = metrics_dir / model_name
+            model_metrics_dir.mkdir(parents=True, exist_ok=True)
+
+            # Save metrics
+            test_metrics_path = model_metrics_dir / "test_metrics.json"
+            with open(test_metrics_path, "w") as f:
+                json.dump(test_metrics, f, indent=4)
+            mlflow.log_artifact(test_metrics_path)
+
+            return best_model, test_metrics, run.info.run_id
+
+    except Exception as e:
+        logger.error(f"Error in train_and_evaluate_model for {model_name}: {str(e)}")
+        raise
+
 def setup_mlflow_experiment():
     """Set up MLflow experiment"""
     experiment_name = "telco_commission_prediction"

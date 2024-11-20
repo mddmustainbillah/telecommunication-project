@@ -44,28 +44,42 @@ def map_input_data(input_data: Dict[str, Union[str, float]]) -> Dict[str, Union[
 def predict(data: Dict[str, Union[str, float]]) -> Dict:
     """Make predictions using the production model."""
     try:
+        # Add logging for debugging
+        logger.info(f"Starting prediction with data: {data}")
+        
         # Map input data
         mapped_data = map_input_data(data)
+        logger.info(f"Mapped data: {mapped_data}")
 
         # Convert mapped data to DataFrame
         df = pd.DataFrame([mapped_data])
+        logger.info(f"Created DataFrame: {df}")
 
         # Get production model
         registry = ModelRegistry()
-        model = registry.get_production_model("RandomForest_model")  # or whichever model is in production
+        model = registry.get_production_model("RandomForest_model")
         
         if model is None:
+            logger.error("No production model available")
             return {"error": "No production model available", "status": "failed"}
 
         # Make prediction
         prediction = model.predict(df)[0]
+        logger.info(f"Made prediction: {prediction}")
+        
         return {
             "predictions": float(prediction),
             "status": "success"
         }
 
+    except ValueError as ve:
+        logger.error(f"Validation error: {str(ve)}")
+        return {
+            "error": str(ve),
+            "status": "failed"
+        }
     except Exception as e:
-        logger.error(f"Prediction failed: {str(e)}")
+        logger.error(f"Prediction failed: {str(e)}", exc_info=True)  # Add full traceback
         return {
             "error": str(e),
             "status": "failed"

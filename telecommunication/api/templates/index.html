@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Telecom Commission Predictor</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='/css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Telecom Commission Predictor</h1>
+        
+        <div class="prediction-form">
+            <form id="predictionForm">
+                <div class="form-group">
+                    <label for="bundle_type">Bundle Type:</label>
+                    <select id="bundle_type" name="bundle_type" required>
+                        <option value="Internet & Minute">Internet & Minute</option>
+                        <option value="Internet">Internet</option>
+                        <option value="Minute">Minute</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="operator">Operator:</label>
+                    <select id="operator" name="operator" required>
+                        <option value="robi">Robi</option>
+                        <option value="gp">GP</option>
+                        <option value="airtel">Airtel</option>
+                        <option value="bl">BL</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="validity">Validity (days):</label>
+                    <input type="number" id="validity" name="validity" step="1" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="regular_price">Regular Price:</label>
+                    <input type="number" id="regular_price" name="regular_price" step="0.01" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="selling_price">Selling Price:</label>
+                    <input type="number" id="selling_price" name="selling_price" step="0.01" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="internet">Internet (GB):</label>
+                    <input type="number" id="internet" name="internet" step="0.1" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="minutes">Minutes:</label>
+                    <input type="number" id="minutes" name="minutes" step="1" required>
+                </div>
+
+                <div class="form-group button-group">
+                    <button type="submit">Predict Commission</button>
+                    <button type="button" id="clearForm">Clear Form</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="result-container" id="resultContainer" style="display: none;">
+            <h2>Prediction Result</h2>
+            <div class="result" id="predictionResult"></div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', path='/js/script.js') }}"></script>
+</body>
+</html>

@@ -17,23 +17,70 @@ class ModelRegistry:
     def get_production_model(self, model_name: str):
         """Get the production model"""
         try:
+            logger.info(f"Attempting to load production model: {model_name}")
+            logger.info(f"MLflow tracking URI: {mlflow.get_tracking_uri()}")
+            
             # Search for registered models
             registered_models = self.client.search_registered_models(filter_string=f"name='{model_name}'")
-            logger.info(f"Available registered models: {[rm.name for rm in registered_models]}")
+            logger.info(f"Found registered models: {[rm.name for rm in registered_models]}")
+            
+            if not registered_models:
+                logger.error(f"No registered model found with name: {model_name}")
+                return None
             
             # Get production versions
             versions = self.client.get_latest_versions(model_name, stages=["Production"])
             logger.info(f"Production versions found: {versions}")
             
             if versions:
-                model_uri = f"models:/{model_name}/{versions[0].version}"
-                logger.info(f"Loading model from URI: {model_uri}")
-                return mlflow.pyfunc.load_model(model_uri)
+                version = versions[0]
+                # Get the run ID and load model directly from the run artifacts
+                run_id = version.run_id
+                experiment_id = self.client.get_run(run_id).info.experiment_id
+                artifact_uri = f"mlruns/{experiment_id}/{run_id}/artifacts/model"
+                
+                logger.info(f"Loading model from artifact URI: {artifact_uri}")
+                model = mlflow.sklearn.load_model(artifact_uri)
+                return model
+            
             logger.error(f"No production version found for model: {model_name}")
             return None
+            
         except Exception as e:
-            logger.error(f"Error loading production model: {str(e)}")
+            logger.error(f"Error loading production model: {str(e)}", exc_info=True)
             return None
+
+    def promote_staging_to_production(self, model_name: str) -> bool:
+        """Promote staging model to production"""
+        try:
+            # Get staging model
+            staging_model = self.get_staging_model(model_name)
+            if not staging_model:
+                logger.warning(f"No staging model found for {model_name}")
+                return False
+
+            # Get current production versions and archive them
+            production_versions = self.client.get_latest_versions(model_name, stages=["Production"])
+            for version in production_versions:
+                self.client.transition_model_version_stage(
+                    name=model_name,
+                    version=version.version,
+                    stage="Archived"
+                )
+                logger.info(f"Archived model {model_name} version {version.version}")
+
+            # Transition staging to production
+            self.client.transition_model_version_stage(
+                name=model_name,
+                version=staging_model['version'],
+                stage="Production"
+            )
+            logger.info(f"Model {model_name} version {staging_model['version']} promoted to production")
+            return True
+
+        except Exception as e:
+            logger.error(f"Error promoting model to production: {str(e)}")
+            return False
 
     def get_staging_model(self, model_name: str) -> Optional[Dict]:
         """Get current staging model details"""
@@ -50,29 +97,6 @@ class ModelRegistry:
         except Exception as e:
             logger.error(f"Error getting staging model: {str(e)}")
             return None
-
-    def promote_staging_to_production(self, model_name: str) -> bool:
-        """Promote staging model to production"""
-        try:
-            # Get staging model
-            staging_model = self.get_staging_model(model_name)
-            if not staging_model:
-                logger.warning(f"No staging model found for {model_name}")
-                return False
-
-            # Transition to production
-            self.client.transition_model_version_stage(
-                name=model_name,
-                version=staging_model['version'],
-                stage="Production",
-                archive_existing_versions=True
-            )
-            logger.info(f"Model {model_name} version {staging_model['version']} promoted to production")
-            return True
-
-        except Exception as e:
-            logger.error(f"Error promoting model to production: {str(e)}")
-            return False
 
 def main():
     """Promote the best model from staging to production"""

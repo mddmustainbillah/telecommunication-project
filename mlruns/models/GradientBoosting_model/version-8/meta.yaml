@@ -1,0 +1,13 @@
+aliases: []
+creation_timestamp: 1732085331090
+current_stage: None
+description: null
+last_updated_timestamp: 1732085331090
+name: GradientBoosting_model
+run_id: b39028de13e448b6b81300fdac9ea63b
+run_link: null
+source: file:///Users/macbookpro/Resources/mlops/telecommunication-project/mlruns/740651038120529355/b39028de13e448b6b81300fdac9ea63b/artifacts/model
+status: READY
+status_message: null
+user_id: null
+version: 8

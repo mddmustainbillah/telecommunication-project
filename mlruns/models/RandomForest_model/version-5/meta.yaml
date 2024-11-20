@@ -1,8 +1,8 @@
 aliases: []
 creation_timestamp: 1731317694000
-current_stage: Production
+current_stage: Archived
 description: null
-last_updated_timestamp: 1731328671860
+last_updated_timestamp: 1732085837309
 name: RandomForest_model
 run_id: 3a93f7ffa99344c9a59febd74f69880b
 run_link: null
