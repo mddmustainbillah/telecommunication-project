@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/macbookpro/Resources/mlops/telecommunication-project/mlruns/740651038120529355/74c12aad546742f587aecae07bcedbcc/artifacts
+end_time: 1732280450956
+entry_point_name: ''
+experiment_id: '740651038120529355'
+lifecycle_stage: active
+run_id: 74c12aad546742f587aecae07bcedbcc
+run_name: victorious-cod-533
+run_uuid: 74c12aad546742f587aecae07bcedbcc
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1732280447174
+status: 3
+tags: []
+user_id: macbookpro

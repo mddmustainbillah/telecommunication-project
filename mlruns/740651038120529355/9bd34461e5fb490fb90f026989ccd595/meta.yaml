@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/macbookpro/Resources/mlops/telecommunication-project/mlruns/740651038120529355/9bd34461e5fb490fb90f026989ccd595/artifacts
+end_time: 1732205962072
+entry_point_name: ''
+experiment_id: '740651038120529355'
+lifecycle_stage: active
+run_id: 9bd34461e5fb490fb90f026989ccd595
+run_name: rare-koi-75
+run_uuid: 9bd34461e5fb490fb90f026989ccd595
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1732205940873
+status: 3
+tags: []
+user_id: macbookpro

@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/macbookpro/Resources/mlops/telecommunication-project/mlruns/740651038120529355/eb69ea7bb17b4c9b9754dba112289dc7/artifacts
+end_time: 1732219931153
+entry_point_name: ''
+experiment_id: '740651038120529355'
+lifecycle_stage: active
+run_id: eb69ea7bb17b4c9b9754dba112289dc7
+run_name: silent-jay-858
+run_uuid: eb69ea7bb17b4c9b9754dba112289dc7
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1732219843138
+status: 3
+tags: []
+user_id: macbookpro

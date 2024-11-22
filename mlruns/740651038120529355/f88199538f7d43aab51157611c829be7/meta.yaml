@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/macbookpro/Resources/mlops/telecommunication-project/mlruns/740651038120529355/f88199538f7d43aab51157611c829be7/artifacts
+end_time: 1732220026042
+entry_point_name: ''
+experiment_id: '740651038120529355'
+lifecycle_stage: active
+run_id: f88199538f7d43aab51157611c829be7
+run_name: hilarious-hog-60
+run_uuid: f88199538f7d43aab51157611c829be7
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1732219943732
+status: 3
+tags: []
+user_id: macbookpro

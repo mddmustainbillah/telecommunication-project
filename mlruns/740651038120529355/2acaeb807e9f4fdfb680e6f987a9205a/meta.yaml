@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/macbookpro/Resources/mlops/telecommunication-project/mlruns/740651038120529355/2acaeb807e9f4fdfb680e6f987a9205a/artifacts
+end_time: 1732205940864
+entry_point_name: ''
+experiment_id: '740651038120529355'
+lifecycle_stage: active
+run_id: 2acaeb807e9f4fdfb680e6f987a9205a
+run_name: calm-pig-515
+run_uuid: 2acaeb807e9f4fdfb680e6f987a9205a
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1732205889133
+status: 3
+tags: []
+user_id: macbookpro

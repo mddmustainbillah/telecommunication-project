@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/macbookpro/Resources/mlops/telecommunication-project/mlruns/740651038120529355/ddd6cedcab884315be6e5414dc790df6/artifacts
+end_time: 1732217662731
+entry_point_name: ''
+experiment_id: '740651038120529355'
+lifecycle_stage: active
+run_id: ddd6cedcab884315be6e5414dc790df6
+run_name: defiant-ape-361
+run_uuid: ddd6cedcab884315be6e5414dc790df6
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1732217570843
+status: 3
+tags: []
+user_id: macbookpro

@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/macbookpro/Resources/mlops/telecommunication-project/mlruns/740651038120529355/db426d6873b54e16a5c502af6b572621/artifacts
+end_time: 1732211717555
+entry_point_name: ''
+experiment_id: '740651038120529355'
+lifecycle_stage: active
+run_id: db426d6873b54e16a5c502af6b572621
+run_name: skittish-elk-735
+run_uuid: db426d6873b54e16a5c502af6b572621
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1732209448142
+status: 3
+tags: []
+user_id: macbookpro

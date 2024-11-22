@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/macbookpro/Resources/mlops/telecommunication-project/mlruns/740651038120529355/2a4bec62c60142f0808f75d07dda327a/artifacts
+end_time: 1732255727616
+entry_point_name: ''
+experiment_id: '740651038120529355'
+lifecycle_stage: active
+run_id: 2a4bec62c60142f0808f75d07dda327a
+run_name: calm-cat-142
+run_uuid: 2a4bec62c60142f0808f75d07dda327a
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1732255702004
+status: 3
+tags: []
+user_id: macbookpro

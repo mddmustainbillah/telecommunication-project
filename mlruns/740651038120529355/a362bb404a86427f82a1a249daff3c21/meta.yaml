@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/macbookpro/Resources/mlops/telecommunication-project/mlruns/740651038120529355/a362bb404a86427f82a1a249daff3c21/artifacts
+end_time: 1732217570813
+entry_point_name: ''
+experiment_id: '740651038120529355'
+lifecycle_stage: active
+run_id: a362bb404a86427f82a1a249daff3c21
+run_name: flawless-moth-85
+run_uuid: a362bb404a86427f82a1a249daff3c21
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1732217364223
+status: 3
+tags: []
+user_id: macbookpro

@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/macbookpro/Resources/mlops/telecommunication-project/mlruns/740651038120529355/b2f733e6487045d398a182af6a6187aa/artifacts
+end_time: 1732280419936
+entry_point_name: ''
+experiment_id: '740651038120529355'
+lifecycle_stage: active
+run_id: b2f733e6487045d398a182af6a6187aa
+run_name: magnificent-eel-102
+run_uuid: b2f733e6487045d398a182af6a6187aa
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1732280362315
+status: 3
+tags: []
+user_id: macbookpro

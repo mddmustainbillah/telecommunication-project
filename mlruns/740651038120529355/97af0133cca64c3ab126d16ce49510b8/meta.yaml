@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/macbookpro/Resources/mlops/telecommunication-project/mlruns/740651038120529355/97af0133cca64c3ab126d16ce49510b8/artifacts
+end_time: 1732214044273
+entry_point_name: ''
+experiment_id: '740651038120529355'
+lifecycle_stage: active
+run_id: 97af0133cca64c3ab126d16ce49510b8
+run_name: smiling-pug-26
+run_uuid: 97af0133cca64c3ab126d16ce49510b8
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1732214014796
+status: 3
+tags: []
+user_id: macbookpro

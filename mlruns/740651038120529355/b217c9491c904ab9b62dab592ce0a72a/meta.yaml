@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/macbookpro/Resources/mlops/telecommunication-project/mlruns/740651038120529355/b217c9491c904ab9b62dab592ce0a72a/artifacts
+end_time: 1732255670330
+entry_point_name: ''
+experiment_id: '740651038120529355'
+lifecycle_stage: active
+run_id: b217c9491c904ab9b62dab592ce0a72a
+run_name: skillful-crane-2
+run_uuid: b217c9491c904ab9b62dab592ce0a72a
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1732255612066
+status: 3
+tags: []
+user_id: macbookpro

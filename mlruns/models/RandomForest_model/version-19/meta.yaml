@@ -1,0 +1,13 @@
+aliases: []
+creation_timestamp: 1732280419887
+current_stage: None
+description: null
+last_updated_timestamp: 1732280419887
+name: RandomForest_model
+run_id: b2f733e6487045d398a182af6a6187aa
+run_link: null
+source: file:///Users/macbookpro/Resources/mlops/telecommunication-project/mlruns/740651038120529355/b2f733e6487045d398a182af6a6187aa/artifacts/model
+status: READY
+status_message: null
+user_id: null
+version: 19

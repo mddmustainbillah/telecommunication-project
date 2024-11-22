@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/macbookpro/Resources/mlops/telecommunication-project/mlruns/740651038120529355/1a701b3406f74caaa6ef1abb66b68ab9/artifacts
+end_time: 1732206900519
+entry_point_name: ''
+experiment_id: '740651038120529355'
+lifecycle_stage: active
+run_id: 1a701b3406f74caaa6ef1abb66b68ab9
+run_name: flawless-owl-861
+run_uuid: 1a701b3406f74caaa6ef1abb66b68ab9
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1732206882667
+status: 3
+tags: []
+user_id: macbookpro

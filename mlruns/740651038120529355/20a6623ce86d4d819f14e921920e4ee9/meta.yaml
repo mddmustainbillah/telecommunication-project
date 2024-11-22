@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/macbookpro/Resources/mlops/telecommunication-project/mlruns/740651038120529355/20a6623ce86d4d819f14e921920e4ee9/artifacts
+end_time: 1732215019640
+entry_point_name: ''
+experiment_id: '740651038120529355'
+lifecycle_stage: active
+run_id: 20a6623ce86d4d819f14e921920e4ee9
+run_name: brawny-goat-661
+run_uuid: 20a6623ce86d4d819f14e921920e4ee9
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1732214044341
+status: 3
+tags: []
+user_id: macbookpro

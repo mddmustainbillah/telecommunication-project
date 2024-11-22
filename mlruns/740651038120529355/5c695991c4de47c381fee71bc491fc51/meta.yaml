@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/macbookpro/Resources/mlops/telecommunication-project/mlruns/740651038120529355/5c695991c4de47c381fee71bc491fc51/artifacts
+end_time: 1732213019639
+entry_point_name: ''
+experiment_id: '740651038120529355'
+lifecycle_stage: active
+run_id: 5c695991c4de47c381fee71bc491fc51
+run_name: industrious-frog-679
+run_uuid: 5c695991c4de47c381fee71bc491fc51
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1732212809042
+status: 3
+tags: []
+user_id: macbookpro

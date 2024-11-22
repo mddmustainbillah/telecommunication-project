@@ -22,3 +22,4 @@ xgboost
 mlflow
 fastapi
 pydantic
+prefect
